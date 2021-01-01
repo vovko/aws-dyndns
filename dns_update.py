@@ -3,9 +3,9 @@ import requests
 import argparse
 
 class AWSDynDns(object):
-    def __init__(self, domain, record, hosted_zone_id, profile_name, ttl):
+    def __init__(self, domain, record, hosted_zone_id, ttl):
         self.ip_service = "http://httpbin.org/ip"
-        session = boto3.Session(profile_name=profile_name)
+        session = boto3.Session()
         self.client = session.client('route53')
         self.domain = domain
         self.record = record
@@ -98,13 +98,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Manage a dynamic home IP address with an AWS hosted route53 domain")
 
     parser.add_argument(
-        "--profile","-p",
-        default='ddns',
-        help="AWS credential profile",
-        required=False
-    )
-
-    parser.add_argument(
         "--domain", "-d",
         help="Domain to modify",
         required=True
@@ -131,5 +124,5 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    run = AWSDynDns(args.domain, args.record, args.zone, args.profile, args.ttl)
+    run = AWSDynDns(args.domain, args.record, args.zone, args.ttl)
     run.update_record()
