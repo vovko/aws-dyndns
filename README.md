@@ -22,35 +22,24 @@ Next, select **Attach existing policies directly**, find the IAM policy you just
 
 To see your new access key, choose **Show**. Your credentials will look something like this:
 
-    Access key ID: AKIAIOSFODNN7EXAMPLE
-    Secret access key: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+    Access key ID: XXX
+    Secret access key: XXX
 
 To download the key pair, choose **Download .csv file**. Store the keys in a secure location.
 ![IAM_user_accessKey](screenshots/IAM_user_accessKey.png)
 
 ## AWS credentials
-If you have the AWS CLI installed, then you can use it to configure your credentials file:
-
-    aws configure --profile ddns
-Alternatively, you can create the credential file yourself. By default, its location is at ~/.aws/credentials:
-
-    [ddns]
-    aws_access_key_id = YOUR_ACCESS_KEY
-    aws_secret_access_key = YOUR_SECRET_KEY
-
-By default, `dns_update.py` will use the **ddns** credential profile. You can change this by issuing the `--profile PROFILE` option.
+Boto3 is using AWS Credentials via ENV Variables `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` or Instance role attached to the instance
 
 # usage
 ```
-usage: dns_update.py [-h] [--profile PROFILE] --domain DOMAIN
+usage: dns_update.py [-h] --domain DOMAIN
                      [--record RECORD] [--zone ZONE] [--ttl TTL]
 
 Manage a dynamic home IP address with an AWS hosted route53 domain
 
 optional arguments:
   -h, --help            show this help message and exit
-  --profile PROFILE, -p PROFILE
-                        AWS credential profile
   --domain DOMAIN, -d DOMAIN
                         Domain to modify
   --record RECORD, -r RECORD
@@ -58,3 +47,10 @@ optional arguments:
   --zone ZONE, -z ZONE  AWS hosted zone id
   --ttl TTL             Record TTL
 ```
+
+# deployment
+Release docker image by running
+```
+AWS_ACCESS_KEY_ID=XXX AWS_SECRET_ACCESS_KEY=XXX ./scripts/release.sh
+```
+Policy [ecr_iam_policy.json](ecr_iam_policy.json) is required to upload docker image to ECR
