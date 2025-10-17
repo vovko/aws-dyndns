@@ -1,0 +1,14 @@
+services:
+  aws-dyndns:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: vovko/aws-dyndns:latest
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      HOSTED_ZONE_ID: ${HOSTED_ZONE_ID}
+      RECORD_NAME: ${RECORD_NAME}
+      TTL: ${TTL:-60}
+    restart: unless-stopped
