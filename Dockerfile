@@ -1,15 +1,15 @@
-FROM python:3.8.5-slim-buster
+FROM python:3.11-slim
 
-RUN \
-  apt-get update -qq \
-  && apt-get install -y build-essential \
-  && mkdir /app
-
-COPY . /app
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update -y \
+ && apt-get install -y --no-install-recommends build-essential ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
-COPY requirements.txt requirements.txt 
-RUN pip3 install -r requirements.txt
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
+COPY . .
 ENV TERM=xterm
-ENTRYPOINT [ "python3", "dns_update.py" ]
+ENTRYPOINT ["python", "dns_update.py"]
+
