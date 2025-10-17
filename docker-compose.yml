@@ -9,6 +9,6 @@ services:
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
       AWS_REGION: ${AWS_REGION:-us-east-1}
       HOSTED_ZONE_ID: ${HOSTED_ZONE_ID}
+      DOMAIN: ${DOMAIN}
       RECORD_NAME: ${RECORD_NAME}
-      TTL: ${TTL:-60}
-    restart: unless-stopped
+      TTL: ${TTL:-300}

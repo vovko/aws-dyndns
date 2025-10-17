@@ -95,34 +95,42 @@ class AWSDynDns(object):
 
 
 if __name__ == "__main__":
+    import os
+
     parser = argparse.ArgumentParser(description="Manage a dynamic home IP address with an AWS hosted route53 domain")
 
     parser.add_argument(
         "--domain", "-d",
         help="Domain to modify",
-        required=True
+        default=os.environ.get('DOMAIN'),
+        required=False
     )
 
     parser.add_argument(
         "--record", "-r",
         help="Record to modify",
+        default=os.environ.get('RECORD_NAME'),
         required=False
     )
 
     parser.add_argument(
         "--zone", "-z",
         help="AWS hosted zone id",
+        default=os.environ.get('HOSTED_ZONE_ID'),
         required=False
     )
 
     parser.add_argument(
         "--ttl",
-        default=300,
+        default=int(os.environ.get('TTL', 300)),
         help="Record TTL",
         required=False
     )
 
     args = parser.parse_args()
 
-    run = AWSDynDns(args.domain, args.record, args.zone, args.ttl)
+    if not args.domain:
+        raise ValueError("DOMAIN must be provided via environment variable or --domain argument")
+
+    run = AWSDynDns(args.domain, args.record, args.zone, int(args.ttl))
     run.update_record()
